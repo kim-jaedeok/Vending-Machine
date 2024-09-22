@@ -51,9 +51,7 @@ export class VendingMachine implements IVendingMachine {
         name: item.name,
         price: item.price.toString(),
         sellable,
-        sell: () => {
-          // TODO: 상품 판매 로직
-        },
+        sell: () => this.#sell(item.name),
       };
     });
   }
@@ -136,5 +134,17 @@ export class VendingMachine implements IVendingMachine {
     }
 
     return true;
+  }
+  #sell(product: Product["name"]) {
+    const price = this.#productStorage.getProductPrice(product);
+
+    if (price && this.#checkSellable(product)) {
+      const salesItem = this.#productStorage.subtractItem(product, 1);
+      //TODO - 카드 결제 처리
+      this.#changeIndicator.subtract(salesItem.price.value);
+      //TODO - 상품 반환함에 추가
+    } else {
+      throw new Error("상품을 판매할 수 없습니다.");
+    }
   }
 }

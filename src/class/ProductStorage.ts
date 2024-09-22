@@ -32,18 +32,27 @@ export class ProductStorage {
 
     this.#itemStock.set(product, this.#getStockOf(product) + quantity);
   }
-  subtractItem(product: Product["name"], quantity: number) {
-    if (this.#itemStock.has(product)) {
-      if (quantity < 0) {
-        throw new Error("수량은 0보다 작을 수 없습니다.");
-      }
+  subtractItem(productName: Product["name"], quantity: number): Product {
+    const product = this.#items.find((item) => item.name === productName);
 
-      if (this.#getStockOf(product) < quantity) {
-        throw new Error("재고가 부족합니다.");
-      }
-
-      this.#itemStock.set(product, this.#getStockOf(product) - quantity);
+    if (!product) {
+      throw new Error("존재하지 않는 상품입니다.");
     }
+    if (quantity < 0) {
+      throw new Error("수량은 0보다 작을 수 없습니다.");
+    }
+    if (this.#getStockOf(productName) < quantity) {
+      throw new Error("재고가 부족합니다.");
+    }
+
+    this.#itemStock.set(productName, this.#getStockOf(productName) - quantity);
+
+    return {
+      ...product,
+      price: {
+        ...product.price,
+      },
+    } as Product;
   }
 
   #getStockOf(product: Product["name"]) {
