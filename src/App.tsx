@@ -1,10 +1,16 @@
 import { ChangeIndicator } from "./class/ChangeIndicator";
+import { SalesItems } from "./class/SalesItems";
 import { useVendingMachine } from "./hook/useVendingMachine";
 import classNames from "classnames";
 import { useState } from "react";
 
 function App() {
   const vendingMachine = useVendingMachine({
+    salesItems: new SalesItems([
+      { name: "콜라", price: { value: 1100, currency: "원" }, stock: 0 },
+      { name: "물", price: { value: 600, currency: "원" }, stock: 10 },
+      { name: "커피", price: { value: 700, currency: "원" }, stock: 5 },
+    ]),
     changeIndicator: new ChangeIndicator(0, "원"),
   });
   const [actionLog] = useState<string[]>([]);
@@ -18,21 +24,14 @@ function App() {
           <section>
             <h3>판매 품목</h3>
             <ul className="flex gap-4">
-              <li>
-                <div>콜라</div>
-                <div>1,100원</div>
-                <button>구매</button>
-              </li>
-              <li>
-                <div>물</div>
-                <div>600원</div>
-                <button>구매</button>
-              </li>
-              <li>
-                <div>커피</div>
-                <div>700원</div>
-                <button>구매</button>
-              </li>
+              {vendingMachine.salesItems.map(({ name, price, sellable }) => (
+                <li key={name}>
+                  <div>{name}</div>
+                  <div>{price}</div>
+                  <div>{sellable ? "구매 가능" : "구매 불가능"}</div>
+                  <button disabled={!sellable}>구매</button>
+                </li>
+              ))}
             </ul>
           </section>
 
