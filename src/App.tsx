@@ -28,6 +28,7 @@ function App() {
                 <li key={name}>
                   <div>{name}</div>
                   <div>{price}</div>
+                  <div>{sellable ? "구매 가능" : "구매 불가능"}</div>
                   <button disabled={!sellable}>구매</button>
                 </li>
               ))}
