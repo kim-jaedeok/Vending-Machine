@@ -1,7 +1,7 @@
 import { Coin, Paper, Payment } from "../types/payment";
 import { Product } from "../types/product";
 import { VendingMachine as IVendingMachine } from "../types/vendingMachine";
-import { CashVault } from "./CashValut";
+import { CashVault } from "./CashVault";
 import { ChangeIndicator } from "./ChangeIndicator";
 import { SalesItems } from "./SalesItems";
 import { CardReader } from "./paymentReader/CardReader";

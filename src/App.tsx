@@ -1,4 +1,4 @@
-import { CashVault } from "./class/CashValut";
+import { CashVault } from "./class/CashVault";
 import { ChangeIndicator } from "./class/ChangeIndicator";
 import { SalesItems } from "./class/SalesItems";
 import { CardReader } from "./class/paymentReader/CardReader";
