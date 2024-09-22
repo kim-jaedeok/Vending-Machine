@@ -1,5 +1,8 @@
 import { ChangeIndicator } from "./class/ChangeIndicator";
 import { SalesItems } from "./class/SalesItems";
+import { CardReader } from "./class/paymentReader/CardReader";
+import { CoinReader } from "./class/paymentReader/CoinReader";
+import { PaperReader } from "./class/paymentReader/PaperReader";
 import { useVendingMachine } from "./hook/useVendingMachine";
 import classNames from "classnames";
 import { useState } from "react";
@@ -7,10 +10,22 @@ import { useState } from "react";
 function App() {
   const vendingMachine = useVendingMachine({
     salesItems: new SalesItems([
-      { name: "콜라", price: { value: 1100, currency: "원" }, stock: 0 },
+      { name: "콜라", price: { value: 1100, currency: "원" }, stock: 1 },
       { name: "물", price: { value: 600, currency: "원" }, stock: 10 },
       { name: "커피", price: { value: 700, currency: "원" }, stock: 5 },
     ]),
+    paymentReader: {
+      card: new CardReader(),
+      coin: new CoinReader([
+        { value: 100, currency: "원" },
+        { value: 500, currency: "원" },
+      ]),
+      paper: new PaperReader([
+        { value: 1000, currency: "원" },
+        { value: 5000, currency: "원" },
+        { value: 10000, currency: "원" },
+      ]),
+    },
     changeIndicator: new ChangeIndicator(0, "원"),
   });
   const [actionLog] = useState<string[]>([]);
