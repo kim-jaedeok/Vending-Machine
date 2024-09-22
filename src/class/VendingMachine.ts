@@ -94,7 +94,10 @@ export class VendingMachine implements IVendingMachine {
     ) {
       return false;
     }
-    //TODO - 잔돈 반환 가능 여부 확인
+
+    if (!this.#cashVault.canWithdraw(price)) {
+      return false;
+    }
 
     return true;
   }
