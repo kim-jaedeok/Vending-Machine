@@ -11,6 +11,12 @@ export class ChangeIndicator {
     this.#currency = currency;
   }
 
+  get value() {
+    return this.#value;
+  }
+  get currency() {
+    return this.#currency;
+  }
   toString() {
     return `${this.#value}${this.#currency}`;
   }

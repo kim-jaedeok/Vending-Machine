@@ -4,13 +4,24 @@ import { useState } from "react";
 
 export const useVendingMachine = (
   VendingMachineParams: VendingMachineParams,
-) => {
+): IVendingMachine => {
   const vendingMachine = useState(new VendingMachine(VendingMachineParams))[0];
-  const captureVendingMachineSnapshot = (): IVendingMachine => ({
+  const captureVendingMachineSnapshot = (): Pick<
+    IVendingMachine,
+    "changeValue" | "salesItems"
+  > => ({
     changeValue: vendingMachine.changeValue,
     salesItems: vendingMachine.salesItems,
   });
-  const [vendingMachineSnapshot] = useState(captureVendingMachineSnapshot());
+  const [vendingMachineSnapshot, setVendingMachineSnapshot] = useState(
+    captureVendingMachineSnapshot(),
+  );
 
-  return vendingMachineSnapshot;
+  return {
+    ...vendingMachineSnapshot,
+    inputPayment: (payment) => {
+      vendingMachine.inputPayment(payment);
+      setVendingMachineSnapshot(captureVendingMachineSnapshot());
+    },
+  };
 };
