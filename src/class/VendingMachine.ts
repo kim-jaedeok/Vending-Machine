@@ -76,7 +76,18 @@ export class VendingMachine implements IVendingMachine {
       return false;
     }
 
-    //TODO - 보충 필요
+    //TODO - 카드 입력 여부 확인
+
+    // 가격이 잔돈 이하의 상품인지 확인
+    const price = this.#salesItems.getProductPrice(product);
+    if (
+      price === undefined ||
+      this.#changeIndicator.currency !== price.currency ||
+      this.#changeIndicator.value < price.value
+    ) {
+      return false;
+    }
+    //TODO - 잔돈 반환 가능 여부 확인
 
     return true;
   }

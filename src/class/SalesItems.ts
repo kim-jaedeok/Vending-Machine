@@ -19,6 +19,9 @@ export class SalesItems {
     }));
   }
 
+  getProductPrice(product: Product["name"]) {
+    return this.#items.find((item) => item.name === product)?.price;
+  }
   hasStockOf(product: Product["name"]) {
     return this.#getStockOf(product) > 0;
   }
