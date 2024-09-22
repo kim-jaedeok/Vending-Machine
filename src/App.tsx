@@ -1,6 +1,6 @@
 import { CashVault } from "./class/CashVault";
 import { ChangeIndicator } from "./class/ChangeIndicator";
-import { SalesItems } from "./class/SalesItems";
+import { ProductStorage } from "./class/ProductStorage";
 import { CardReader } from "./class/paymentReader/CardReader";
 import { CoinReader } from "./class/paymentReader/CoinReader";
 import { PaperReader } from "./class/paymentReader/PaperReader";
@@ -11,7 +11,7 @@ import { useState } from "react";
 
 function App() {
   const vendingMachine = useVendingMachine({
-    salesItems: new SalesItems([
+    productStorage: new ProductStorage([
       { name: "콜라", price: { value: 1100, currency: "원" }, stock: 1 },
       { name: "물", price: { value: 600, currency: "원" }, stock: 10 },
       { name: "커피", price: { value: 700, currency: "원" }, stock: 5 },

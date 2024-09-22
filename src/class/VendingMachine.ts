@@ -4,14 +4,14 @@ import { VendingMachine as IVendingMachine } from "../types/vendingMachine";
 import { CashVault } from "./CashVault";
 import { ChangeIndicator } from "./ChangeIndicator";
 import { ChangeStorage } from "./ChangeStorage";
-import { SalesItems } from "./SalesItems";
+import { ProductStorage } from "./ProductStorage";
 import { CardReader } from "./paymentReader/CardReader";
 import { CoinReader } from "./paymentReader/CoinReader";
 import { PaperReader } from "./paymentReader/PaperReader";
 import autoBind from "auto-bind";
 
 export interface VendingMachineParams {
-  salesItems: SalesItems;
+  productStorage: ProductStorage;
   paymentReader: {
     coin: CoinReader;
     paper: PaperReader;
@@ -21,7 +21,7 @@ export interface VendingMachineParams {
   cashVault: CashVault;
 }
 export class VendingMachine implements IVendingMachine {
-  #salesItems;
+  #productStorage;
   #paymentReader;
   #cashVault;
   #changeIndicator;
@@ -31,20 +31,20 @@ export class VendingMachine implements IVendingMachine {
   };
 
   constructor({
-    salesItems,
+    productStorage,
     paymentReader,
     changeIndicator,
     cashVault,
   }: VendingMachineParams) {
     autoBind(this);
-    this.#salesItems = salesItems;
+    this.#productStorage = productStorage;
     this.#paymentReader = paymentReader;
     this.#changeIndicator = changeIndicator;
     this.#cashVault = cashVault;
   }
 
   get salesItems() {
-    return this.#salesItems.list.map((item) => ({
+    return this.#productStorage.list.map((item) => ({
       name: item.name,
       price: item.price.toString(),
       sellable: this.#checkSellable(item.name),
@@ -106,7 +106,7 @@ export class VendingMachine implements IVendingMachine {
   }
 
   #checkSellable(product: Product["name"]) {
-    if (!this.#salesItems.hasStockOf(product)) {
+    if (!this.#productStorage.hasStockOf(product)) {
       return false;
     }
 
@@ -115,7 +115,7 @@ export class VendingMachine implements IVendingMachine {
     }
 
     // 가격이 잔돈 이하의 상품인지 확인
-    const price = this.#salesItems.getProductPrice(product);
+    const price = this.#productStorage.getProductPrice(product);
     if (
       price === undefined ||
       this.#changeIndicator.currency !== price.currency ||
