@@ -6,8 +6,6 @@ import { CoinReader } from "./class/paymentReader/CoinReader";
 import { PaperReader } from "./class/paymentReader/PaperReader";
 import { useVendingMachine } from "./hook/useVendingMachine";
 import { Card } from "./types/payment";
-import classNames from "classnames";
-import { useState } from "react";
 
 function App() {
   const vendingMachine = useVendingMachine({
@@ -65,7 +63,6 @@ function App() {
       100,
     ),
   });
-  const [actionLog] = useState<string[]>([]);
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -212,17 +209,6 @@ function App() {
             </ul>
           </section>
         </div>
-
-        <section className="flex flex-col w-full">
-          <h2>Action Log</h2>
-          <ul
-            className={classNames("flex flex-col gap-1 grow", "overflow-auto")}
-          >
-            {actionLog.map((action, index) => (
-              <li key={index}>{action}</li>
-            ))}
-          </ul>
-        </section>
       </div>
     </div>
   );
