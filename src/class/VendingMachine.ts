@@ -76,6 +76,16 @@ export class VendingMachine implements IVendingMachine {
       }
     }
   }
+  removePayment(payment: Payment["kind"]) {
+    switch (payment) {
+      case "card":
+        this.#paymentReader.card.remove();
+        break;
+      case "cash":
+      // TODO - 금고에서 현금 반환
+    }
+  }
+
   #checkSellable(product: Product["name"]) {
     if (!this.#salesItems.hasStockOf(product)) {
       return false;

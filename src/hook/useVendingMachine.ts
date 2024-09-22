@@ -23,5 +23,9 @@ export const useVendingMachine = (
       vendingMachine.inputPayment(payment);
       setVendingMachineSnapshot(captureVendingMachineSnapshot());
     },
+    removePayment: (payment) => {
+      vendingMachine.removePayment(payment);
+      setVendingMachineSnapshot(captureVendingMachineSnapshot());
+    },
   };
 };

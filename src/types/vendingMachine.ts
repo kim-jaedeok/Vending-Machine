@@ -1,3 +1,5 @@
+import { Payment } from "./payment";
+
 export interface VendingMachine {
   salesItems: { name: string; price: string; sellable: boolean }[];
   /**
@@ -8,4 +10,5 @@ export interface VendingMachine {
    * @param payment 사용자가 입력한 결제 수단. 무엇이 입력되는 지 알 수 없어 any로 정의
    */
   inputPayment(payment: any): void;
+  removePayment(payment: Payment["kind"]): void;
 }

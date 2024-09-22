@@ -108,7 +108,13 @@ function App() {
                 >
                   카드 입력
                 </button>
-                <button>카드 제거</button>
+                <button
+                  onClick={() => {
+                    vendingMachine.removePayment("card");
+                  }}
+                >
+                  카드 제거
+                </button>
               </div>
             </section>
             <section>
@@ -151,7 +157,10 @@ function App() {
                   <li key={index}>
                     <button
                       onClick={() => {
-                        vendingMachine.inputPayment(money);
+                        vendingMachine.inputPayment({
+                          ...money,
+                          value: { ...money.value },
+                        });
                       }}
                     >{`${money.value.value}${money.value.currency}`}</button>
                   </li>
@@ -160,7 +169,7 @@ function App() {
             </section>
             <div>{`잔돈: ${vendingMachine.changeValue}`}</div>
             <button>잔돈 반환</button>
-            <div>거스름돈 보관함</div>
+            <div>현금 반환함</div>
           </div>
 
           <div>구매품 보관함</div>
