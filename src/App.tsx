@@ -119,7 +119,7 @@ function App() {
             </section>
             <section>
               <h3>현금 입력기</h3>
-              <ul className="flex flex-col gap-1">
+              <ul className="flex gap-1">
                 {[
                   {
                     kind: "cash",
@@ -171,7 +171,30 @@ function App() {
             <button onClick={() => vendingMachine.removePayment("cash")}>
               잔돈 반환
             </button>
-            <div>현금 반환함</div>
+            <section>
+              <h3>동전 반환함</h3>
+              <ul>
+                {vendingMachine.changeStorage.coin.map((change, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={change.remove}
+                    >{`${change.cash.value.value}${change.cash.value.currency}`}</button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <h3>지폐 반환함</h3>
+              <ul>
+                {vendingMachine.changeStorage.paper.map((change, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={change.remove}
+                    >{`${change.cash.value.value}${change.cash.value.currency}`}</button>
+                  </li>
+                ))}
+              </ul>
+            </section>
           </div>
 
           <div>구매품 보관함</div>

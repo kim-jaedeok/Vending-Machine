@@ -53,6 +53,12 @@ export class VendingMachine implements IVendingMachine {
   get changeValue() {
     return this.#changeIndicator.toString();
   }
+  get changeStorage() {
+    return {
+      coin: this.#changeStorage.coin.list,
+      paper: this.#changeStorage.paper.list,
+    };
+  }
 
   inputPayment(payment: Payment) {
     if (payment.kind === "card") {
@@ -78,7 +84,7 @@ export class VendingMachine implements IVendingMachine {
         this.#cashVault.save(payment);
         this.#changeIndicator.add(payment.value.value);
       } else {
-        //TODO - 입력값 즉시 반환
+        this.#changeStorage[payment.value.kind].add(payment);
       }
     }
   }
@@ -93,7 +99,7 @@ export class VendingMachine implements IVendingMachine {
           currency: this.#changeIndicator.currency,
         })) {
           this.#changeIndicator.subtract(cash.value.value);
-          //TODO - 반환값 현금 반환함으로 이동
+          this.#changeStorage[cash.value.kind].add(cash);
         }
       }
     }
