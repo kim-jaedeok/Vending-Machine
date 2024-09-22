@@ -1,4 +1,4 @@
-import { CashVault } from "./class/CashValut";
+import { CashVault } from "./class/CashVault";
 import { ChangeIndicator } from "./class/ChangeIndicator";
 import { SalesItems } from "./class/SalesItems";
 import { CardReader } from "./class/paymentReader/CardReader";
@@ -108,12 +108,18 @@ function App() {
                 >
                   카드 입력
                 </button>
-                <button>카드 제거</button>
+                <button
+                  onClick={() => {
+                    vendingMachine.removePayment("card");
+                  }}
+                >
+                  카드 제거
+                </button>
               </div>
             </section>
             <section>
               <h3>현금 입력기</h3>
-              <ul className="flex flex-col gap-1">
+              <ul className="flex gap-1">
                 {[
                   {
                     kind: "cash",
@@ -151,7 +157,10 @@ function App() {
                   <li key={index}>
                     <button
                       onClick={() => {
-                        vendingMachine.inputPayment(money);
+                        vendingMachine.inputPayment({
+                          ...money,
+                          value: { ...money.value },
+                        });
                       }}
                     >{`${money.value.value}${money.value.currency}`}</button>
                   </li>
@@ -159,8 +168,33 @@ function App() {
               </ul>
             </section>
             <div>{`잔돈: ${vendingMachine.changeValue}`}</div>
-            <button>잔돈 반환</button>
-            <div>거스름돈 보관함</div>
+            <button onClick={() => vendingMachine.removePayment("cash")}>
+              잔돈 반환
+            </button>
+            <section>
+              <h3>동전 반환함</h3>
+              <ul>
+                {vendingMachine.changeStorage.coin.map((change, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={change.remove}
+                    >{`${change.cash.value.value}${change.cash.value.currency}`}</button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+            <section>
+              <h3>지폐 반환함</h3>
+              <ul>
+                {vendingMachine.changeStorage.paper.map((change, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={change.remove}
+                    >{`${change.cash.value.value}${change.cash.value.currency}`}</button>
+                  </li>
+                ))}
+              </ul>
+            </section>
           </div>
 
           <div>구매품 보관함</div>

@@ -8,3 +8,10 @@ button {
   border: 1px solid gray;
   border-radius: 4px;
 }
+
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}

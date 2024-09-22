@@ -1,8 +1,9 @@
 import { Coin, Paper, Payment } from "../types/payment";
 import { Product } from "../types/product";
 import { VendingMachine as IVendingMachine } from "../types/vendingMachine";
-import { CashVault } from "./CashValut";
+import { CashVault } from "./CashVault";
 import { ChangeIndicator } from "./ChangeIndicator";
+import { ChangeStorage } from "./ChangeStorage";
 import { SalesItems } from "./SalesItems";
 import { CardReader } from "./paymentReader/CardReader";
 import { CoinReader } from "./paymentReader/CoinReader";
@@ -22,8 +23,12 @@ export interface VendingMachineParams {
 export class VendingMachine implements IVendingMachine {
   #salesItems;
   #paymentReader;
-  #changeIndicator;
   #cashVault;
+  #changeIndicator;
+  #changeStorage = {
+    coin: new ChangeStorage(),
+    paper: new ChangeStorage(),
+  };
 
   constructor({
     salesItems,
@@ -48,6 +53,12 @@ export class VendingMachine implements IVendingMachine {
   get changeValue() {
     return this.#changeIndicator.toString();
   }
+  get changeStorage() {
+    return {
+      coin: this.#changeStorage.coin.list,
+      paper: this.#changeStorage.paper.list,
+    };
+  }
 
   inputPayment(payment: Payment) {
     if (payment.kind === "card") {
@@ -70,12 +81,30 @@ export class VendingMachine implements IVendingMachine {
       }
 
       if (isValidCash && this.#cashVault.canSave(payment)) {
-        //TODO - 입력된 현금 기록
         this.#cashVault.save(payment);
         this.#changeIndicator.add(payment.value.value);
+      } else {
+        this.#changeStorage[payment.value.kind].add(payment);
       }
     }
   }
+  removePayment(payment: Payment["kind"]) {
+    switch (payment) {
+      case "card":
+        this.#paymentReader.card.remove();
+        break;
+      case "cash": {
+        for (const cash of this.#cashVault.withdraw({
+          value: this.#changeIndicator.value,
+          currency: this.#changeIndicator.currency,
+        })) {
+          this.#changeIndicator.subtract(cash.value.value);
+          this.#changeStorage[cash.value.kind].add(cash);
+        }
+      }
+    }
+  }
+
   #checkSellable(product: Product["name"]) {
     if (!this.#salesItems.hasStockOf(product)) {
       return false;
@@ -94,7 +123,10 @@ export class VendingMachine implements IVendingMachine {
     ) {
       return false;
     }
-    //TODO - 잔돈 반환 가능 여부 확인
+
+    if (!this.#cashVault.canWithdraw(price)) {
+      return false;
+    }
 
     return true;
   }
