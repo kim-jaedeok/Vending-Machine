@@ -88,115 +88,119 @@ function App() {
             </ul>
           </section>
 
-          <div className="flex flex-col gap-1">
-            <section>
-              <h3>카드 입력기</h3>
-              <div className="flex gap-1">
-                <button
-                  onClick={() => {
-                    const card: Card = {
-                      kind: "card",
-                      value: {
-                        kind: "credit",
-                        expiration: {
-                          from: new Date("2/1/22"),
-                          to: new Date("2/1/28"),
-                        },
+          <section>
+            <h3>카드 입력기</h3>
+            <div className="flex gap-1">
+              <button
+                onClick={() => {
+                  const card: Card = {
+                    kind: "card",
+                    value: {
+                      kind: "credit",
+                      expiration: {
+                        from: new Date("2/1/22"),
+                        to: new Date("2/1/28"),
                       },
-                    };
-                    vendingMachine.inputPayment(card);
-                  }}
-                >
-                  카드 입력
-                </button>
-                <button
-                  onClick={() => {
-                    vendingMachine.removePayment("card");
-                  }}
-                >
-                  카드 제거
-                </button>
-              </div>
-            </section>
-            <section>
-              <h3>현금 입력기</h3>
-              <ul className="flex gap-1">
-                {[
-                  {
-                    kind: "cash",
-                    value: { kind: "coin", value: 10, currency: "원" },
-                  },
-                  {
-                    kind: "cash",
-                    value: { kind: "coin", value: 100, currency: "원" },
-                  },
-                  {
-                    kind: "cash",
-                    value: { kind: "coin", value: 500, currency: "원" },
-                  },
-                  {
-                    kind: "cash",
-                    value: { kind: "paper", value: 1000, currency: "원" },
-                  },
-                  {
-                    kind: "cash",
-                    value: { kind: "paper", value: 5000, currency: "원" },
-                  },
-                  {
-                    kind: "cash",
-                    value: { kind: "paper", value: 10000, currency: "원" },
-                  },
-                  {
-                    kind: "cash",
-                    value: { kind: "coin", value: 50, currency: "¢" },
-                  },
-                  {
-                    kind: "cash",
-                    value: { kind: "paper", value: 1, currency: "$" },
-                  },
-                ].map((money, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={() => {
-                        vendingMachine.inputPayment({
-                          ...money,
-                          value: { ...money.value },
-                        });
-                      }}
-                    >{`${money.value.value}${money.value.currency}`}</button>
-                  </li>
-                ))}
-              </ul>
-            </section>
+                    },
+                  };
+                  vendingMachine.inputPayment(card);
+                }}
+              >
+                카드 입력
+              </button>
+              <button
+                onClick={() => {
+                  vendingMachine.removePayment("card");
+                }}
+              >
+                카드 제거
+              </button>
+            </div>
+          </section>
+
+          <section>
+            <h3>현금 입력기</h3>
+            <ul className="flex gap-1">
+              {[
+                {
+                  kind: "cash",
+                  value: { kind: "coin", value: 10, currency: "원" },
+                },
+                {
+                  kind: "cash",
+                  value: { kind: "coin", value: 100, currency: "원" },
+                },
+                {
+                  kind: "cash",
+                  value: { kind: "coin", value: 500, currency: "원" },
+                },
+                {
+                  kind: "cash",
+                  value: { kind: "paper", value: 1000, currency: "원" },
+                },
+                {
+                  kind: "cash",
+                  value: { kind: "paper", value: 5000, currency: "원" },
+                },
+                {
+                  kind: "cash",
+                  value: { kind: "paper", value: 10000, currency: "원" },
+                },
+                {
+                  kind: "cash",
+                  value: { kind: "coin", value: 50, currency: "¢" },
+                },
+                {
+                  kind: "cash",
+                  value: { kind: "paper", value: 1, currency: "$" },
+                },
+              ].map((money, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => {
+                      vendingMachine.inputPayment({
+                        ...money,
+                        value: { ...money.value },
+                      });
+                    }}
+                  >{`${money.value.value}${money.value.currency}`}</button>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <div>
             <div>{`잔돈: ${vendingMachine.changeValue}`}</div>
             <button onClick={() => vendingMachine.removePayment("cash")}>
               잔돈 반환
             </button>
-            <section>
-              <h3>동전 반환함</h3>
-              <ul>
-                {vendingMachine.changeStorage.coin.map((change, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={change.remove}
-                    >{`${change.item.value.value}${change.item.value.currency}`}</button>
-                  </li>
-                ))}
-              </ul>
-            </section>
-            <section>
-              <h3>지폐 반환함</h3>
-              <ul>
-                {vendingMachine.changeStorage.paper.map((change, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={change.remove}
-                    >{`${change.item.value.value}${change.item.value.currency}`}</button>
-                  </li>
-                ))}
-              </ul>
-            </section>
           </div>
+
+          <section>
+            <h3>동전 반환함</h3>
+            <ul className="flex gap-1">
+              {vendingMachine.changeStorage.coin.map((change, index) => (
+                <li key={index}>
+                  <button
+                    onClick={change.remove}
+                  >{`${change.item.value.value}${change.item.value.currency}`}</button>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <h3>지폐 반환함</h3>
+            <ul className="flex gap-1">
+              {vendingMachine.changeStorage.paper.map((change, index) => (
+                <li key={index}>
+                  <button
+                    onClick={change.remove}
+                  >{`${change.item.value.value}${change.item.value.currency}`}</button>
+                </li>
+              ))}
+            </ul>
+          </section>
 
           <section>
             <h3>구매품 보관함</h3>
