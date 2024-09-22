@@ -1,7 +1,12 @@
+import { ChangeIndicator } from "./class/ChangeIndicator";
+import { useVendingMachine } from "./hook/useVendingMachine";
 import classNames from "classnames";
 import { useState } from "react";
 
 function App() {
+  const vendingMachine = useVendingMachine({
+    changeIndicator: new ChangeIndicator(0, "원"),
+  });
   const [actionLog] = useState<string[]>([]);
 
   return (
@@ -46,7 +51,7 @@ function App() {
                 ))}
               </ul>
             </section>
-            <div>잔돈: 0</div>
+            <div>{`잔돈: ${vendingMachine.changeValue}`}</div>
             <button>잔돈 반환</button>
             <div>거스름돈 보관함</div>
           </div>
