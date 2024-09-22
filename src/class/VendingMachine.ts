@@ -1,17 +1,17 @@
-import { Coin, Paper, Payment } from "../types/payment";
+import { Cash, Coin, Paper, Payment } from "../types/payment";
 import { Product } from "../types/product";
 import { VendingMachine as IVendingMachine } from "../types/vendingMachine";
 import { CashVault } from "./CashVault";
 import { ChangeIndicator } from "./ChangeIndicator";
-import { ChangeStorage } from "./ChangeStorage";
-import { SalesItems } from "./SalesItems";
+import { ProductVault } from "./ProductVault";
+import { Storage } from "./Storage";
 import { CardReader } from "./paymentReader/CardReader";
 import { CoinReader } from "./paymentReader/CoinReader";
 import { PaperReader } from "./paymentReader/PaperReader";
 import autoBind from "auto-bind";
 
 export interface VendingMachineParams {
-  salesItems: SalesItems;
+  productVault: ProductVault;
   paymentReader: {
     coin: CoinReader;
     paper: PaperReader;
@@ -21,34 +21,40 @@ export interface VendingMachineParams {
   cashVault: CashVault;
 }
 export class VendingMachine implements IVendingMachine {
-  #salesItems;
+  #productVault;
   #paymentReader;
   #cashVault;
   #changeIndicator;
   #changeStorage = {
-    coin: new ChangeStorage(),
-    paper: new ChangeStorage(),
+    coin: new Storage<Cash>(),
+    paper: new Storage<Cash>(),
   };
+  #productStorage = new Storage<Product>();
 
   constructor({
-    salesItems,
+    productVault,
     paymentReader,
     changeIndicator,
     cashVault,
   }: VendingMachineParams) {
     autoBind(this);
-    this.#salesItems = salesItems;
+    this.#productVault = productVault;
     this.#paymentReader = paymentReader;
     this.#changeIndicator = changeIndicator;
     this.#cashVault = cashVault;
   }
 
   get salesItems() {
-    return this.#salesItems.list.map((item) => ({
-      name: item.name,
-      price: item.price.toString(),
-      sellable: this.#checkSellable(item.name),
-    }));
+    return this.#productVault.list.map((item) => {
+      const sellable = this.#checkSellable(item.name);
+
+      return {
+        name: item.name,
+        price: item.price.toString(),
+        sellable,
+        sell: () => this.#sell(item.name),
+      };
+    });
   }
   get changeValue() {
     return this.#changeIndicator.toString();
@@ -58,6 +64,9 @@ export class VendingMachine implements IVendingMachine {
       coin: this.#changeStorage.coin.list,
       paper: this.#changeStorage.paper.list,
     };
+  }
+  get productStorage() {
+    return this.#productStorage.list;
   }
 
   inputPayment(payment: Payment) {
@@ -106,7 +115,7 @@ export class VendingMachine implements IVendingMachine {
   }
 
   #checkSellable(product: Product["name"]) {
-    if (!this.#salesItems.hasStockOf(product)) {
+    if (!this.#productVault.hasStockOf(product)) {
       return false;
     }
 
@@ -115,7 +124,7 @@ export class VendingMachine implements IVendingMachine {
     }
 
     // 가격이 잔돈 이하의 상품인지 확인
-    const price = this.#salesItems.getProductPrice(product);
+    const price = this.#productVault.getProductPrice(product);
     if (
       price === undefined ||
       this.#changeIndicator.currency !== price.currency ||
@@ -129,5 +138,17 @@ export class VendingMachine implements IVendingMachine {
     }
 
     return true;
+  }
+  #sell(product: Product["name"]) {
+    const price = this.#productVault.getProductPrice(product);
+    if (price && this.#checkSellable(product)) {
+      if (!this.#paymentReader.card.pay(price)) {
+        this.#changeIndicator.subtract(price.value);
+      }
+
+      this.#productStorage.add(this.#productVault.subtractItem(product, 1));
+    } else {
+      throw new Error("상품을 판매할 수 없습니다.");
+    }
   }
 }

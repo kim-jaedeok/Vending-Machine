@@ -1,5 +1,6 @@
-import { Card } from "../../types/payment";
+import { Card, CashCurrency } from "../../types/payment";
 import { PaymentReader } from "../../types/paymentReader";
+import { Price } from "../../types/product";
 import autoBind from "auto-bind";
 
 export class CardReader implements PaymentReader {
@@ -17,15 +18,22 @@ export class CardReader implements PaymentReader {
     this.#card = null;
   }
   read() {
-    if (this.#isValidCard) {
+    return this.#isValidCard;
+  }
+  pay(_price: Price<number, CashCurrency>) {
+    return this.#tryPay(_price);
+  }
+
+  get #isValidCard() {
+    //NOTE - 카드사와 통신하여 카드가 유효한지 확인한다고 가정
+    if (this.#card) {
       return true;
     } else {
       return false;
     }
   }
-
-  get #isValidCard() {
-    //NOTE - 카드사와 통신하여 카드가 유효한지 확인한다고 가정
+  #tryPay(_price: Price<number, CashCurrency>) {
+    //NOTE - 카드사와 통신하여 결제를 진행한다고 가정
     if (this.#card) {
       return true;
     } else {
