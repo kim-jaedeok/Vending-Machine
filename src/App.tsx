@@ -56,11 +56,48 @@ function App() {
               <div></div>
             </section>
             <section>
-              <div>현금 입력</div>
+              <h3>현금 입력기</h3>
               <ul className="flex flex-col gap-1">
-                {[10, 50, 100, 500, 1000, 5000, 10000].map((money) => (
-                  <li key={money}>
-                    <button>{`${money}원`}</button>
+                {[
+                  {
+                    kind: "cash",
+                    value: { kind: "coin", value: 10, currency: "원" },
+                  },
+                  {
+                    kind: "cash",
+                    value: { kind: "coin", value: 100, currency: "원" },
+                  },
+                  {
+                    kind: "cash",
+                    value: { kind: "coin", value: 500, currency: "원" },
+                  },
+                  {
+                    kind: "cash",
+                    value: { kind: "paper", value: 1000, currency: "원" },
+                  },
+                  {
+                    kind: "cash",
+                    value: { kind: "paper", value: 5000, currency: "원" },
+                  },
+                  {
+                    kind: "cash",
+                    value: { kind: "paper", value: 10000, currency: "원" },
+                  },
+                  {
+                    kind: "cash",
+                    value: { kind: "coin", value: 50, currency: "¢" },
+                  },
+                  {
+                    kind: "cash",
+                    value: { kind: "paper", value: 1, currency: "$" },
+                  },
+                ].map((money, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={() => {
+                        vendingMachine.inputPayment(money);
+                      }}
+                    >{`${money.value.value}${money.value.currency}`}</button>
                   </li>
                 ))}
               </ul>
