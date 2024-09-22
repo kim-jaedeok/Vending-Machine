@@ -43,6 +43,7 @@ export class CashVault {
     const stock = this.#cashStock.get(this.#getCashSignature(cash.value)) || 0;
     this.#cashStock.set(this.#getCashSignature(cash.value), stock + 1);
     this.#saveLog.push(cash.value);
+    this.#saveLog.sort((a, b) => a.value - b.value);
   }
   canWithdraw(price: Price<number, CashCurrency>) {
     const descendingSupportCash = this.#supportCash
