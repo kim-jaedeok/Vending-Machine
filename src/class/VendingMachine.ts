@@ -1,10 +1,10 @@
-import { Coin, Paper, Payment } from "../types/payment";
+import { Cash, Coin, Paper, Payment } from "../types/payment";
 import { Product } from "../types/product";
 import { VendingMachine as IVendingMachine } from "../types/vendingMachine";
 import { CashVault } from "./CashVault";
 import { ChangeIndicator } from "./ChangeIndicator";
-import { ChangeStorage } from "./ChangeStorage";
 import { ProductVault } from "./ProductVault";
+import { Storage } from "./Storage";
 import { CardReader } from "./paymentReader/CardReader";
 import { CoinReader } from "./paymentReader/CoinReader";
 import { PaperReader } from "./paymentReader/PaperReader";
@@ -26,8 +26,8 @@ export class VendingMachine implements IVendingMachine {
   #cashVault;
   #changeIndicator;
   #changeStorage = {
-    coin: new ChangeStorage(),
-    paper: new ChangeStorage(),
+    coin: new Storage<Cash>(),
+    paper: new Storage<Cash>(),
   };
 
   constructor({

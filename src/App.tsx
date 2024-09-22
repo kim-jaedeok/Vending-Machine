@@ -182,7 +182,7 @@ function App() {
                   <li key={index}>
                     <button
                       onClick={change.remove}
-                    >{`${change.cash.value.value}${change.cash.value.currency}`}</button>
+                    >{`${change.item.value.value}${change.item.value.currency}`}</button>
                   </li>
                 ))}
               </ul>
@@ -194,7 +194,7 @@ function App() {
                   <li key={index}>
                     <button
                       onClick={change.remove}
-                    >{`${change.cash.value.value}${change.cash.value.currency}`}</button>
+                    >{`${change.item.value.value}${change.item.value.currency}`}</button>
                   </li>
                 ))}
               </ul>
