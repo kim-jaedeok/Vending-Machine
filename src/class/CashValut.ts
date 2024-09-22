@@ -1,4 +1,4 @@
-import { Coin, Paper } from "../types/payment";
+import { Cash, Coin, Paper } from "../types/payment";
 import { Price } from "../types/product";
 import autoBind from "auto-bind";
 
@@ -23,6 +23,24 @@ export class CashVault {
       this.#cashStock.set(this.#getCashSignature(cash), cash.stock);
     });
     this.#maxCapacity = maxCapacity;
+  }
+
+  canSave(cash: Cash) {
+    const stock = this.#cashStock.get(this.#getCashSignature(cash.value));
+
+    if (stock === undefined || this.#maxCapacity <= stock) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  save(cash: Cash) {
+    if (!this.canSave(cash)) {
+      throw new Error("현금을 저장할 수 없습니다");
+    }
+
+    const stock = this.#cashStock.get(this.#getCashSignature(cash.value)) || 0;
+    this.#cashStock.set(this.#getCashSignature(cash.value), stock + 1);
   }
 
   #getCashSignature(cash: Cash["value"]) {

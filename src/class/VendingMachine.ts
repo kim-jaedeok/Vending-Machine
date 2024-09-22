@@ -69,9 +69,9 @@ export class VendingMachine implements IVendingMachine {
         }
       }
 
-      if (isValidCash) {
-        //TODO - 금고에 현금을 넣을 수 있는지 확인
-        //TODO - 금고에 현금을 넣는다
+      if (isValidCash && this.#cashVault.canSave(payment)) {
+        //TODO - 입력된 현금 기록
+        this.#cashVault.save(payment);
         this.#changeIndicator.add(payment.value.value);
       }
     }
