@@ -140,8 +140,11 @@ export class VendingMachine implements IVendingMachine {
 
     if (price && this.#checkSellable(product)) {
       const salesItem = this.#productStorage.subtractItem(product, 1);
-      //TODO - 카드 결제 처리
-      this.#changeIndicator.subtract(salesItem.price.value);
+
+      if (!this.#paymentReader.card.pay(price)) {
+        this.#changeIndicator.subtract(salesItem.price.value);
+      }
+
       //TODO - 상품 반환함에 추가
     } else {
       throw new Error("상품을 판매할 수 없습니다.");
