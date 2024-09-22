@@ -1,7 +1,7 @@
 import { Product } from "../types/product";
 import autoBind from "auto-bind";
 
-export class ProductStorage {
+export class ProductVault {
   #items: Product[];
   #itemStock = new Map<Product["name"], number>();
 
