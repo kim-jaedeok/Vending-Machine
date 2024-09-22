@@ -1,13 +1,16 @@
-import { CashCurrency } from "../types/payment";
+import { VendingMachine as IVendingMachine } from "../types/vendingMachine";
 import { ChangeIndicator } from "./ChangeIndicator";
 import autoBind from "auto-bind";
 
-export class VendingMachine {
+export interface VendingMachineParams {
+  changeIndicator: ChangeIndicator;
+}
+export class VendingMachine implements IVendingMachine {
   #changeIndicator;
 
-  constructor(currency: CashCurrency) {
+  constructor({ changeIndicator }: VendingMachineParams) {
     autoBind(this);
-    this.#changeIndicator = new ChangeIndicator(0, currency);
+    this.#changeIndicator = changeIndicator;
   }
 
   get changeValue() {

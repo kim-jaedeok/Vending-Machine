@@ -1,9 +1,12 @@
-import { VendingMachine } from "./class/VendingMachine";
+import { ChangeIndicator } from "./class/ChangeIndicator";
+import { useVendingMachine } from "./hook/useVendingMachine";
 import classNames from "classnames";
 import { useState } from "react";
 
 function App() {
-  const [vendingMachine] = useState(new VendingMachine("원"));
+  const vendingMachine = useVendingMachine({
+    changeIndicator: new ChangeIndicator(0, "원"),
+  });
   const [actionLog] = useState<string[]>([]);
 
   return (
