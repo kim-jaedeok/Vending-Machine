@@ -44,11 +44,18 @@ export class VendingMachine implements IVendingMachine {
   }
 
   get salesItems() {
-    return this.#productStorage.list.map((item) => ({
-      name: item.name,
-      price: item.price.toString(),
-      sellable: this.#checkSellable(item.name),
-    }));
+    return this.#productStorage.list.map((item) => {
+      const sellable = this.#checkSellable(item.name);
+
+      return {
+        name: item.name,
+        price: item.price.toString(),
+        sellable,
+        sell: () => {
+          // TODO: 상품 판매 로직
+        },
+      };
+    });
   }
   get changeValue() {
     return this.#changeIndicator.toString();

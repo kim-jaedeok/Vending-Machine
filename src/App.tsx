@@ -76,14 +76,18 @@ function App() {
           <section>
             <h3>판매 품목</h3>
             <ul className="flex gap-4">
-              {vendingMachine.salesItems.map(({ name, price, sellable }) => (
-                <li key={name}>
-                  <div>{name}</div>
-                  <div>{price}</div>
-                  <div>{sellable ? "구매 가능" : "구매 불가능"}</div>
-                  <button disabled={!sellable}>구매</button>
-                </li>
-              ))}
+              {vendingMachine.salesItems.map(
+                ({ name, price, sellable, sell }) => (
+                  <li key={name}>
+                    <div>{name}</div>
+                    <div>{price}</div>
+                    <div>{sellable ? "구매 가능" : "구매 불가능"}</div>
+                    <button disabled={!sellable} onClick={sell}>
+                      구매
+                    </button>
+                  </li>
+                ),
+              )}
             </ul>
           </section>
 

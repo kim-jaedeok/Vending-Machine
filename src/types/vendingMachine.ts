@@ -1,7 +1,12 @@
 import { Cash, Payment } from "./payment";
 
 export interface VendingMachine {
-  salesItems: { name: string; price: string; sellable: boolean }[];
+  salesItems: {
+    name: string;
+    price: string;
+    sellable: boolean;
+    sell: () => void;
+  }[];
   /**
    * 현재 남은 잔돈
    */

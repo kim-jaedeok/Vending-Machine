@@ -20,9 +20,16 @@ export const useVendingMachine = (
 
   return {
     ...vendingMachineSnapshot,
+    salesItems: vendingMachine.salesItems.map((item) => ({
+      ...item,
+      sell: () => {
+        item.sell();
+        setVendingMachineSnapshot(captureVendingMachineSnapshot());
+      },
+    })),
     changeStorage: {
       coin: vendingMachine.changeStorage.coin.map((change) => ({
-        cash: change.cash,
+        ...change,
         add: () => {
           change.add();
           setVendingMachineSnapshot(captureVendingMachineSnapshot());
@@ -33,7 +40,7 @@ export const useVendingMachine = (
         },
       })),
       paper: vendingMachine.changeStorage.paper.map((change) => ({
-        cash: change.cash,
+        ...change,
         add: () => {
           change.add();
           setVendingMachineSnapshot(captureVendingMachineSnapshot());
