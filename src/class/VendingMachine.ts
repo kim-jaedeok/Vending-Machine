@@ -70,9 +70,10 @@ export class VendingMachine implements IVendingMachine {
       }
 
       if (isValidCash && this.#cashVault.canSave(payment)) {
-        //TODO - 입력된 현금 기록
         this.#cashVault.save(payment);
         this.#changeIndicator.add(payment.value.value);
+      } else {
+        //TODO - 입력값 즉시 반환
       }
     }
   }
@@ -81,8 +82,15 @@ export class VendingMachine implements IVendingMachine {
       case "card":
         this.#paymentReader.card.remove();
         break;
-      case "cash":
-      // TODO - 금고에서 현금 반환
+      case "cash": {
+        for (const cash of this.#cashVault.withdraw({
+          value: this.#changeIndicator.value,
+          currency: this.#changeIndicator.currency,
+        })) {
+          this.#changeIndicator.subtract(cash.value.value);
+          //TODO - 반환값 현금 반환함으로 이동
+        }
+      }
     }
   }
 

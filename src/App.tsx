@@ -168,7 +168,9 @@ function App() {
               </ul>
             </section>
             <div>{`잔돈: ${vendingMachine.changeValue}`}</div>
-            <button>잔돈 반환</button>
+            <button onClick={() => vendingMachine.removePayment("cash")}>
+              잔돈 반환
+            </button>
             <div>현금 반환함</div>
           </div>
 
