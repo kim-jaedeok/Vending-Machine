@@ -8,11 +8,12 @@ export const useVendingMachine = (
   const vendingMachine = useState(new VendingMachine(VendingMachineParams))[0];
   const captureVendingMachineSnapshot = (): Pick<
     IVendingMachine,
-    "changeValue" | "changeStorage" | "salesItems"
+    "changeValue" | "changeStorage" | "salesItems" | "productStorage"
   > => ({
     changeValue: vendingMachine.changeValue,
     salesItems: vendingMachine.salesItems,
     changeStorage: vendingMachine.changeStorage,
+    productStorage: vendingMachine.productStorage,
   });
   const [vendingMachineSnapshot, setVendingMachineSnapshot] = useState(
     captureVendingMachineSnapshot(),
@@ -51,6 +52,17 @@ export const useVendingMachine = (
         },
       })),
     },
+    productStorage: vendingMachine.productStorage.map((change) => ({
+      ...change,
+      add: () => {
+        change.add();
+        setVendingMachineSnapshot(captureVendingMachineSnapshot());
+      },
+      remove: () => {
+        change.remove();
+        setVendingMachineSnapshot(captureVendingMachineSnapshot());
+      },
+    })),
     inputPayment: (payment) => {
       vendingMachine.inputPayment(payment);
       setVendingMachineSnapshot(captureVendingMachineSnapshot());

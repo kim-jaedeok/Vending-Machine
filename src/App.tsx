@@ -201,7 +201,16 @@ function App() {
             </section>
           </div>
 
-          <div>구매품 보관함</div>
+          <section>
+            <h3>구매품 보관함</h3>
+            <ul className="flex gap-1">
+              {vendingMachine.productStorage.map((product, index) => (
+                <li key={index}>
+                  <button onClick={product.remove}>{product.item.name}</button>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
 
         <section className="flex flex-col w-full">

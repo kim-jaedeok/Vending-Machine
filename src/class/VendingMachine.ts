@@ -29,6 +29,7 @@ export class VendingMachine implements IVendingMachine {
     coin: new Storage<Cash>(),
     paper: new Storage<Cash>(),
   };
+  #productStorage = new Storage<Product>();
 
   constructor({
     productVault,
@@ -63,6 +64,9 @@ export class VendingMachine implements IVendingMachine {
       coin: this.#changeStorage.coin.list,
       paper: this.#changeStorage.paper.list,
     };
+  }
+  get productStorage() {
+    return this.#productStorage.list;
   }
 
   inputPayment(payment: Payment) {
@@ -137,15 +141,12 @@ export class VendingMachine implements IVendingMachine {
   }
   #sell(product: Product["name"]) {
     const price = this.#productVault.getProductPrice(product);
-
     if (price && this.#checkSellable(product)) {
-      const salesItem = this.#productVault.subtractItem(product, 1);
-
       if (!this.#paymentReader.card.pay(price)) {
-        this.#changeIndicator.subtract(salesItem.price.value);
+        this.#changeIndicator.subtract(price.value);
       }
 
-      //TODO - 상품 반환함에 추가
+      this.#productStorage.add(this.#productVault.subtractItem(product, 1));
     } else {
       throw new Error("상품을 판매할 수 없습니다.");
     }
