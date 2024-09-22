@@ -45,8 +45,8 @@ export class VendingMachine implements IVendingMachine {
   }
 
   inputPayment(payment: Payment) {
-    if (payment.kind === "card" && this.#paymentReader.card.read(payment)) {
-      //TODO - 카드 입력 성공 처리
+    if (payment.kind === "card") {
+      this.#paymentReader.card.input(payment);
       return;
     }
 
@@ -76,7 +76,9 @@ export class VendingMachine implements IVendingMachine {
       return false;
     }
 
-    //TODO - 카드 입력 여부 확인
+    if (this.#paymentReader.card.read()) {
+      return true;
+    }
 
     // 가격이 잔돈 이하의 상품인지 확인
     const price = this.#salesItems.getProductPrice(product);
