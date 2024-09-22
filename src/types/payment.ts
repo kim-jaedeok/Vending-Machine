@@ -22,7 +22,10 @@ export interface Card {
   kind: "card";
   value: {
     kind: CardKind;
-    expiration: string;
+    expiration: {
+      from: Date;
+      to: Date;
+    };
   };
 }
 

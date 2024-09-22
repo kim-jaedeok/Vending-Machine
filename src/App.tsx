@@ -4,6 +4,7 @@ import { CardReader } from "./class/paymentReader/CardReader";
 import { CoinReader } from "./class/paymentReader/CoinReader";
 import { PaperReader } from "./class/paymentReader/PaperReader";
 import { useVendingMachine } from "./hook/useVendingMachine";
+import { Card } from "./types/payment";
 import classNames from "classnames";
 import { useState } from "react";
 
@@ -52,8 +53,27 @@ function App() {
 
           <div className="flex flex-col gap-1">
             <section>
-              <div>카드 입력</div>
-              <div></div>
+              <h3>카드 입력기</h3>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => {
+                    const card: Card = {
+                      kind: "card",
+                      value: {
+                        kind: "credit",
+                        expiration: {
+                          from: new Date("2/1/22"),
+                          to: new Date("2/1/28"),
+                        },
+                      },
+                    };
+                    vendingMachine.inputPayment(card);
+                  }}
+                >
+                  카드 입력
+                </button>
+                <button>카드 제거</button>
+              </div>
             </section>
             <section>
               <h3>현금 입력기</h3>
