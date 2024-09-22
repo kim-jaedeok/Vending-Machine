@@ -19,9 +19,6 @@ export class SalesItems {
     }));
   }
 
-  #getStockOf(product: Product["name"]) {
-    return this.#itemStock.get(product) || 0;
-  }
   hasStockOf(product: Product["name"]) {
     return this.#getStockOf(product) > 0;
   }
@@ -44,5 +41,9 @@ export class SalesItems {
 
       this.#itemStock.set(product, this.#getStockOf(product) - quantity);
     }
+  }
+
+  #getStockOf(product: Product["name"]) {
+    return this.#itemStock.get(product) ?? 0;
   }
 }
