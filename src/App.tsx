@@ -1,3 +1,4 @@
+import { CashVault } from "./class/CashValut";
 import { ChangeIndicator } from "./class/ChangeIndicator";
 import { SalesItems } from "./class/SalesItems";
 import { CardReader } from "./class/paymentReader/CardReader";
@@ -28,6 +29,41 @@ function App() {
       ]),
     },
     changeIndicator: new ChangeIndicator(0, "원"),
+    cashVault: new CashVault(
+      [
+        {
+          kind: "coin",
+          value: 100,
+          currency: "원",
+          stock: 10,
+        },
+        {
+          kind: "coin",
+          value: 500,
+          currency: "원",
+          stock: 10,
+        },
+        {
+          kind: "paper",
+          value: 1000,
+          currency: "원",
+          stock: 10,
+        },
+        {
+          kind: "paper",
+          value: 5000,
+          currency: "원",
+          stock: 10,
+        },
+        {
+          kind: "paper",
+          value: 10000,
+          currency: "원",
+          stock: 10,
+        },
+      ],
+      100,
+    ),
   });
   const [actionLog] = useState<string[]>([]);
 

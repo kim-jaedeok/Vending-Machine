@@ -1,6 +1,7 @@
 import { Coin, Paper, Payment } from "../types/payment";
 import { Product } from "../types/product";
 import { VendingMachine as IVendingMachine } from "../types/vendingMachine";
+import { CashVault } from "./CashValut";
 import { ChangeIndicator } from "./ChangeIndicator";
 import { SalesItems } from "./SalesItems";
 import { CardReader } from "./paymentReader/CardReader";
@@ -9,28 +10,32 @@ import { PaperReader } from "./paymentReader/PaperReader";
 import autoBind from "auto-bind";
 
 export interface VendingMachineParams {
+  salesItems: SalesItems;
   paymentReader: {
     coin: CoinReader;
     paper: PaperReader;
     card: CardReader;
   };
-  salesItems: SalesItems;
   changeIndicator: ChangeIndicator;
+  cashVault: CashVault;
 }
 export class VendingMachine implements IVendingMachine {
   #salesItems;
   #paymentReader;
   #changeIndicator;
+  #cashVault;
 
   constructor({
     salesItems,
     paymentReader,
     changeIndicator,
+    cashVault,
   }: VendingMachineParams) {
     autoBind(this);
     this.#salesItems = salesItems;
     this.#paymentReader = paymentReader;
     this.#changeIndicator = changeIndicator;
+    this.#cashVault = cashVault;
   }
 
   get salesItems() {
