@@ -133,7 +133,13 @@ export class VendingMachine implements IVendingMachine {
       return false;
     }
 
-    if (!this.#cashVault.canWithdraw(price)) {
+    // 상품을 구매하는 경우 잔돈을 반환할 수 있는지 확인
+    if (
+      !this.#cashVault.canWithdraw({
+        ...price,
+        value: this.#changeIndicator.value - price.value,
+      })
+    ) {
       return false;
     }
 
