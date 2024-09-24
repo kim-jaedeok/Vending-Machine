@@ -93,6 +93,10 @@ export class CashVault {
       if (latestInputCashStock && latestInputCash.value <= change) {
         change -= latestInputCash.value;
         this.#saveLog.pop();
+        this.#cashStock.set(
+          this.#getCashSignature(latestInputCash),
+          latestInputCashStock - 1,
+        );
 
         yield {
           kind: "cash",
@@ -117,9 +121,14 @@ export class CashVault {
           return supportCash.value <= change && cashStock;
         },
       );
+      const cashSignature =
+        largestSubtractableCash &&
+        this.#getCashSignature(largestSubtractableCash);
+      const cashStock = cashSignature && this.#cashStock.get(cashSignature);
 
-      if (largestSubtractableCash) {
+      if (cashStock) {
         change -= largestSubtractableCash.value;
+        this.#cashStock.set(cashSignature, cashStock - 1);
 
         yield {
           kind: "cash",
